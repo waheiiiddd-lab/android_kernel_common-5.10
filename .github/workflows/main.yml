@@ -1,0 +1,25 @@
+name: Manual Cherry Pick
+on: workflow_dispatch
+
+jobs:
+  pick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: lts # Branch target Anda
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "zixine"
+          git config --global user.email "waheiiiddd@gmail.com"
+
+      - name: Cherry Pick
+        run: |
+          git remote add rinn https://github.com/rinnsakaguchi/android_kernel_common-5.10.git
+          git fetch rinn c02e0bc43bfdf8a82561f8948f0ca698ace5168b
+          git cherry-pick c02e0bc43bfdf8a82561f8948f0ca698ace5168b || echo "Sudah ada atau konflik"
+          git push origin lts
+          
